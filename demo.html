@@ -156,116 +156,103 @@ function processLead() {
   // Show timeline
   document.getElementById('timeline').classList.remove('hidden');
   
-  // Scoring logic
-  let score = 0;
-  const msgLower = msg.toLowerCase();
-  if (tel) score += 2;
-  if (msg.length > 50) score += 2;
-  if (/acheter|cherch|vendre|budget|vente/.test(msgLower)) score += 2;
-  if (/visiter|disponible|urgence|semaine/.test(msgLower)) score += 2;
-  if (/m²|chambres?|jardin|parking|étage|pièces?/.test(msgLower)) score += 1;
-  if (source !== 'seloger') score += 1;
-  score = Math.min(score, 10);
+  // Animate first steps immediately
+  document.getElementById('step1').classList.add('active');
+  setTimeout(() => document.getElementById('step2').classList.add('active'), 300);
 
-  const isHot = score >= 7;
-
-  // Type de bien
-  let typeBien = 'inconnu';
-  if (/appartement|t[1-5]|studio/.test(msgLower)) typeBien = 'appartement';
-  else if (/maison|villa/.test(msgLower)) typeBien = 'maison';
-  else if (/terrain/.test(msgLower)) typeBien = 'terrain';
-  else if (/local|bureau|commerce/.test(msgLower)) typeBien = 'commercial';
-
-  // Budget extraction
-  let budget = 'Non précisé';
-  const budgetMatch = msg.match(/(\d{2,3})[- ]?(\d{3})?[€kK]/);
-  if (budgetMatch) budget = budgetMatch[0];
-  else if (/budget[^.]*?(\d[\d\s\-kK€.]+)/i.test(msg)) budget = msg.match(/budget[^.]*?(\d[\d\s\-kK€.]+)/i)[1];
-
-  // Animate timeline steps
-  const steps = ['step1','step2','step3','step4','step5','step6','step7'];
-  steps.forEach((s, i) => {
-    setTimeout(() => {
-      document.getElementById(s).classList.add('active');
-    }, i * 400);
-  });
-
-  // Show qualification after 1.5s
-  setTimeout(() => {
-    const qualDiv = document.getElementById('result-qualification');
-    qualDiv.classList.remove('hidden');
-    const scoreClass = isHot ? 'score-hot' : (score >= 4 ? 'score-warm' : 'score-cold');
-    const scoreLabel = isHot ? '🔥 CHAUD' : (score >= 4 ? '🟡 TIÈDE' : '❄️ FROID');
-    document.getElementById('qual-content').innerHTML = 
-      `<span class="score-badge ${scoreClass}">${score}/10 — ${scoreLabel}</span>\n\n` +
-      `Type de bien : ${typeBien}\n` +
-      `Budget : ${budget}\n` +
-      `Téléphone : ${tel || '❌ Non fourni'}\n` +
-      `Source : ${source}\n` +
-      `Action : ${isHot ? 'Proposition de RDV immédiate' : 'Questions de qualification'}`;
-  }, 1500);
-
-  // Show email after 2.5s
-  setTimeout(() => {
-    document.getElementById('result-email').classList.remove('hidden');
-    let emailText;
-    if (isHot) {
-      emailText = `De: contact@agence-exemple.re\nÀ: ${email}\nObjet: Re: Votre recherche immobilière — ${nom}\n\n` +
-        `Bonjour ${nom.split(' ')[0]},\n\n` +
-        `Merci pour votre message ! Votre recherche d'${typeBien === 'maison' ? 'une' : 'un'} ${typeBien} ` +
-        `dans le secteur que vous mentionnez est tout à fait réalisable dans votre budget.\n\n` +
-        `Je suis ${nom.split(' ')[0] === 'Sophie' ? 'ravie' : 'ravi'} de vous accompagner. ` +
-        `Nous avons actuellement plusieurs biens correspondant à vos critères.\n\n` +
-        `Seriez-vous disponible pour un appel de 15 minutes cette semaine ? ` +
-        `Vous pouvez réserver un créneau directement ici : [lien Calendly]\n\n` +
-        `À très bientôt,\nL'équipe [Agence]`;
-    } else {
-      emailText = `De: contact@agence-exemple.re\nÀ: ${email}\nObjet: Votre recherche immobilière\n\n` +
-        `Bonjour ${nom.split(' ')[0]},\n\n` +
-        `Merci de votre intérêt ! Pour mieux vous accompagner, ` +
-        `pourriez-vous me préciser :\n\n` +
-        `1. Le type de bien recherché (maison, appartement, terrain) ?\n` +
-        `2. Votre budget approximatif ?\n` +
-        `3. Le secteur géographique souhaité ?\n\n` +
-        `Ces informations me permettront de vous proposer des biens adaptés.\n\n` +
-        `Cordialement,\nL'équipe [Agence]`;
-    }
-    document.getElementById('email-content').textContent = emailText;
-  }, 2500);
-
-  // Show cost after 3s
-  setTimeout(() => {
-    document.getElementById('result-cost').classList.remove('hidden');
-    document.getElementById('cost-content').textContent = 
-      `Qualification : ~200 tokens → $0.0001\n` +
-      `Réponse email : ~400 tokens → $0.0003\n` +
-      `Total : $0.0004 (€0.00037)\n\n` +
-      `⏱️ Temps total : 2.7 secondes\n` +
-      `💰 Pour 200 leads/mois : €0.09/mois\n` +
-      `📊 Marge sur abonnement 297€ : 98.3%`;
-  }, 3000);
-
-  // WhatsApp notification after 3.5s
-  setTimeout(() => {
-    const notif = document.getElementById('whatsapp-notif');
-    notif.classList.remove('hidden');
-    document.getElementById('notif-body').innerHTML = 
-      `🔔 <b>Nouveau lead !</b>\n\n` +
-      `Nom: ${nom}\n` +
-      `Score: ${score}/10 ${isHot ? '🔥' : '🟡'}\n` +
-      `Type: ${typeBien}\n` +
-      `Budget: ${budget}\n\n` +
-      `✅ Réponse auto envoyée en 2.7s`;
+  // REAL API CALL to production backend
+  const API_URL = 'https://kodo-ai-backend.onrender.com/webhook/lead-intake';
+  const startTime = Date.now();
+  
+  fetch(API_URL, {
+    method: 'POST',
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify({ nom, email, telephone: tel, message: msg, source })
+  })
+  .then(r => r.json())
+  .then(data => {
+    const elapsed = ((Date.now() - startTime) / 1000).toFixed(1);
+    const q = data.qualification;
+    const analysis = q.analysis || {};
+    const score = q.score;
+    const isHot = q.is_hot;
+    const typeBien = q.type_bien || 'inconnu';
+    const budget = analysis.budget || 'Non précisé';
+    const zone = analysis.zone || 'Non précisé';
+    const intention = analysis.intention || 'inconnu';
+    const pointsCles = (analysis.points_cles || []).join(', ');
     
-    // Hide notification after 8s
-    setTimeout(() => notif.classList.add('hidden'), 8000);
-  }, 3500);
+    // Complete timeline animation
+    ['step3','step4','step5','step6','step7'].forEach((s, i) => {
+      setTimeout(() => document.getElementById(s).classList.add('active'), i * 200);
+    });
+    // Update step3 with real timing
+    document.getElementById('step3').querySelector('.time').textContent = elapsed + 's';
+    document.getElementById('step3').querySelector('.desc').textContent = '🧠 Qualification IA (' + data.ai_model + ')';
 
-  // Re-enable button after 4s
-  setTimeout(() => {
+    // Show REAL qualification
+    setTimeout(() => {
+      const qualDiv = document.getElementById('result-qualification');
+      qualDiv.classList.remove('hidden');
+      const scoreClass = isHot ? 'score-hot' : (score >= 4 ? 'score-warm' : 'score-cold');
+      const scoreLabel = isHot ? '🔥 CHAUD' : (score >= 4 ? '🟡 TIÈDE' : '❄️ FROID');
+      document.getElementById('qual-content').innerHTML = 
+        `<span class="score-badge ${scoreClass}">${score}/10 — ${scoreLabel}</span>\n\n` +
+        `Type de bien : ${typeBien}\n` +
+        `Budget : ${budget}\n` +
+        `Zone : ${zone}\n` +
+        `Intention : ${intention}\n` +
+        `Points clés : ${pointsCles || 'aucun'}\n` +
+        `Téléphone : ${tel || '❌ Non fourni'}\n` +
+        `Source : ${source}\n` +
+        `Urgence : ${q.urgence || 'inconnue'}`;
+    }, 300);
+
+    // Show REAL AI-generated email
+    setTimeout(() => {
+      document.getElementById('result-email').classList.remove('hidden');
+      document.getElementById('email-content').textContent = 
+        `De: contact@votre-agence.re\nÀ: ${email}\nObjet: Re: Votre recherche immobilière\n\n` +
+        data.ai_response;
+    }, 600);
+
+    // Show REAL cost
+    setTimeout(() => {
+      document.getElementById('result-cost').classList.remove('hidden');
+      document.getElementById('cost-content').textContent = 
+        `Modèle IA : ${data.ai_model}\n` +
+        `Latence totale : ${data.latency_ms}ms\n` +
+        `Temps aller-retour : ${elapsed}s\n` +
+        `Coût estimé : ~$0.0003 (€0.00028)\n\n` +
+        `⚡ CECI EST UNE VRAIE RÉPONSE IA\n` +
+        `Pas une simulation — testez avec vos propres messages !`;
+    }, 900);
+
+    // WhatsApp notification
+    setTimeout(() => {
+      const notif = document.getElementById('whatsapp-notif');
+      notif.classList.remove('hidden');
+      document.getElementById('notif-body').innerHTML = 
+        `🔔 <b>Nouveau lead !</b>\n\n` +
+        `Nom: ${nom}\n` +
+        `Score: ${score}/10 ${isHot ? '🔥' : '🟡'}\n` +
+        `Type: ${typeBien}\n` +
+        `Budget: ${budget}\n\n` +
+        `✅ Réponse IA générée en ${data.latency_ms}ms`;
+      setTimeout(() => notif.classList.add('hidden'), 8000);
+    }, 1200);
+
     btn.disabled = false;
     btn.textContent = '⚡ Envoyer un autre lead';
-  }, 4000);
+  })
+  .catch(err => {
+    document.getElementById('result-qualification').classList.remove('hidden');
+    document.getElementById('qual-content').textContent = 
+      '❌ Erreur: ' + err.message + '\n\n' +
+      '(Le serveur peut mettre ~50s à démarrer au premier appel — Render free tier cold start)';
+    btn.disabled = false;
+    btn.textContent = '⚡ Réessayer';
+  });
 }
 </script>
 </body>
