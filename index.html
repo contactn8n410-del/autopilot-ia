@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AutoPilot IA — Votre Associé Commercial IA</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; color: #1a1a2e; line-height: 1.6; }
+    
+    .hero {
+      background: linear-gradient(135deg, #0f0c29 0%, #302b63 50%, #24243e 100%);
+      color: white; padding: 80px 20px; text-align: center;
+    }
+    .hero h1 { font-size: 2.5em; max-width: 700px; margin: 0 auto 20px; line-height: 1.2; }
+    .hero p { font-size: 1.2em; opacity: 0.9; max-width: 600px; margin: 0 auto 30px; }
+    .cta-btn {
+      display: inline-block; background: #6c63ff; color: white; padding: 15px 40px;
+      border-radius: 8px; text-decoration: none; font-size: 1.1em; font-weight: 600;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .cta-btn:hover { transform: translateY(-2px); box-shadow: 0 10px 30px rgba(108,99,255,0.4); }
+    .badge { background: rgba(255,255,255,0.15); padding: 8px 16px; border-radius: 20px; font-size: 0.85em; display: inline-block; margin-bottom: 20px; }
+
+    .problem { background: #f8f9fa; padding: 60px 20px; text-align: center; }
+    .problem h2 { font-size: 1.8em; margin-bottom: 15px; }
+    .problem .stat { font-size: 3em; font-weight: 800; color: #e74c3c; }
+    .problem .stat-label { font-size: 1.1em; color: #666; max-width: 500px; margin: 0 auto; }
+
+    .how-it-works { padding: 60px 20px; max-width: 900px; margin: 0 auto; }
+    .how-it-works h2 { text-align: center; font-size: 1.8em; margin-bottom: 40px; }
+    .steps { display: flex; flex-direction: column; gap: 30px; }
+    .step { display: flex; align-items: flex-start; gap: 20px; }
+    .step-num { 
+      background: #6c63ff; color: white; width: 40px; height: 40px; 
+      border-radius: 50%; display: flex; align-items: center; justify-content: center;
+      font-weight: 700; flex-shrink: 0;
+    }
+    .step h3 { font-size: 1.2em; margin-bottom: 5px; }
+    .step p { color: #666; }
+    .proactive-tag { background: #e8f5e9; color: #2e7d32; padding: 2px 8px; border-radius: 4px; font-size: 0.8em; font-weight: 600; }
+
+    .packs { background: #f8f9fa; padding: 60px 20px; }
+    .packs h2 { text-align: center; font-size: 1.8em; margin-bottom: 40px; }
+    .pack-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; max-width: 1100px; margin: 0 auto; }
+    .pack-card {
+      background: white; border-radius: 12px; padding: 30px; box-shadow: 0 2px 20px rgba(0,0,0,0.08);
+      transition: transform 0.2s;
+    }
+    .pack-card:hover { transform: translateY(-4px); }
+    .pack-icon { font-size: 2em; margin-bottom: 15px; }
+    .pack-card h3 { font-size: 1.3em; margin-bottom: 10px; }
+    .pack-card ul { list-style: none; margin: 15px 0; }
+    .pack-card ul li { padding: 5px 0; color: #555; }
+    .pack-card ul li::before { content: "✓ "; color: #6c63ff; font-weight: 700; }
+    .pack-price { font-size: 1.5em; font-weight: 700; color: #6c63ff; }
+    .pack-price span { font-size: 0.5em; color: #999; font-weight: 400; }
+
+    .pricing { padding: 60px 20px; max-width: 900px; margin: 0 auto; }
+    .pricing h2 { text-align: center; font-size: 1.8em; margin-bottom: 10px; }
+    .pricing .subtitle { text-align: center; color: #666; margin-bottom: 40px; }
+    .tier-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; }
+    .tier {
+      border: 2px solid #eee; border-radius: 12px; padding: 30px; text-align: center;
+    }
+    .tier.recommended { border-color: #6c63ff; position: relative; }
+    .tier.recommended::before {
+      content: "RECOMMANDÉ"; position: absolute; top: -12px; left: 50%; transform: translateX(-50%);
+      background: #6c63ff; color: white; padding: 4px 16px; border-radius: 12px; font-size: 0.75em; font-weight: 700;
+    }
+    .tier h3 { font-size: 1.3em; margin-bottom: 5px; }
+    .tier .price { font-size: 2.2em; font-weight: 800; color: #1a1a2e; margin: 15px 0; }
+    .tier .price span { font-size: 0.4em; color: #999; font-weight: 400; }
+    .tier ul { list-style: none; text-align: left; margin: 20px 0; }
+    .tier ul li { padding: 8px 0; border-bottom: 1px solid #f0f0f0; color: #555; }
+    .tier ul li::before { content: "✓ "; color: #6c63ff; font-weight: 700; }
+
+    .guarantee { 
+      background: #e8f5e9; padding: 40px 20px; text-align: center; 
+      margin: 40px auto; max-width: 700px; border-radius: 12px;
+    }
+    .guarantee h3 { color: #2e7d32; font-size: 1.3em; margin-bottom: 10px; }
+
+    .final-cta {
+      background: linear-gradient(135deg, #302b63, #24243e); color: white;
+      padding: 60px 20px; text-align: center;
+    }
+    .final-cta h2 { font-size: 1.8em; margin-bottom: 15px; }
+    .final-cta p { opacity: 0.9; margin-bottom: 30px; }
+
+    footer { background: #1a1a2e; color: #999; padding: 30px 20px; text-align: center; font-size: 0.85em; }
+
+    @media (max-width: 768px) {
+      .hero h1 { font-size: 1.8em; }
+      .pack-grid, .tier-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="badge">🤖 Associé Commercial IA — Pas un simple chatbot</div>
+    <h1>Vos leads répondus en 2 minutes, 24h/24, par une IA qui comprend votre métier</h1>
+    <p>Elle qualifie, répond, relance, vous conseille chaque jour, et s'améliore chaque semaine. Vous ne faites rien.</p>
+    <a href="#pricing" class="cta-btn">Voir les packs →</a>
+  </section>
+
+  <!-- PROBLÈME -->
+  <section class="problem">
+    <div class="stat">80%</div>
+    <p class="stat-label">des leads ne sont jamais recontactés dans l'heure.<br><strong>Chaque heure perdue = un client chez le concurrent.</strong></p>
+  </section>
+
+  <!-- COMMENT ÇA MARCHE -->
+  <section class="how-it-works">
+    <h2>Comment ça marche</h2>
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">1</div>
+        <div>
+          <h3>Un lead arrive (email, formulaire, WhatsApp)</h3>
+          <p>L'IA le détecte en temps réel, 24h/24, 7j/7. Pas besoin d'être devant votre écran.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <div>
+          <h3>Qualification instantanée</h3>
+          <p>L'IA analyse le message et attribue un score (budget, urgence, type de besoin). Vous savez immédiatement qui mérite votre attention.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <div>
+          <h3>Réponse personnalisée en &lt;2 minutes</h3>
+          <p>Pas un template générique. Une vraie réponse adaptée au message du prospect, avec votre ton et votre identité.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">4</div>
+        <div>
+          <h3>Relances intelligentes automatiques</h3>
+          <p>J+1, J+3, J+7 — l'IA relance avec des messages différents et pertinents. Plus de leads oubliés.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">5</div>
+        <div>
+          <h3>Conseils proactifs quotidiens <span class="proactive-tag">EXCLUSIF</span></h3>
+          <p>Chaque soir, l'IA analyse vos leads et vous envoie des recommandations : "3 leads chauds à rappeler demain matin", "La demande pour X augmente cette semaine".</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">6</div>
+        <div>
+          <h3>Auto-amélioration continue <span class="proactive-tag">EXCLUSIF</span></h3>
+          <p>Chaque semaine, l'IA compare vos leads convertis vs perdus et améliore ses réponses automatiquement. Plus elle travaille, meilleure elle devient.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PACKS -->
+  <section class="packs">
+    <h2>4 packs pour automatiser votre métier</h2>
+    <div class="pack-grid">
+      <div class="pack-card">
+        <div class="pack-icon">📩</div>
+        <h3>Lead Response</h3>
+        <p>Réponse auto aux leads, qualification IA, relances intelligentes</p>
+        <ul>
+          <li>Réponse en &lt;2 min 24/7</li>
+          <li>Qualification automatique</li>
+          <li>Séquence de relance IA</li>
+          <li>Notifications Telegram</li>
+        </ul>
+        <div class="pack-price">147€<span>/mois</span></div>
+      </div>
+      <div class="pack-card">
+        <div class="pack-icon">💬</div>
+        <h3>Support IA</h3>
+        <p>Chatbot IA sur votre site + FAQ auto + escalade humaine</p>
+        <ul>
+          <li>Chatbot personnalisé</li>
+          <li>FAQ auto-générée</li>
+          <li>Escalade intelligente</li>
+          <li>Historique conversations</li>
+        </ul>
+        <div class="pack-price">147€<span>/mois</span></div>
+      </div>
+      <div class="pack-card">
+        <div class="pack-icon">✍️</div>
+        <h3>Content Factory</h3>
+        <p>Génération auto de contenu (LinkedIn, blog, newsletters)</p>
+        <ul>
+          <li>Posts LinkedIn quotidiens</li>
+          <li>Articles de blog SEO</li>
+          <li>Newsletters hebdomadaires</li>
+          <li>Votre ton et style</li>
+        </ul>
+        <div class="pack-price">97€<span>/mois</span></div>
+      </div>
+      <div class="pack-card">
+        <div class="pack-icon">📊</div>
+        <h3>Admin Zero</h3>
+        <p>Automatisation admin (factures, relances, reporting, saisie)</p>
+        <ul>
+          <li>Traitement factures OCR</li>
+          <li>Relances paiement auto</li>
+          <li>Reporting hebdomadaire</li>
+          <li>Détection anomalies</li>
+        </ul>
+        <div class="pack-price">247€<span>/mois</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PRICING TIERS -->
+  <section class="pricing" id="pricing">
+    <h2>Choisissez votre niveau</h2>
+    <p class="subtitle">Setup : 990€ (installation + personnalisation + formation 1h)</p>
+    <div class="tier-grid">
+      <div class="tier">
+        <h3>Starter</h3>
+        <p>L'essentiel pour démarrer</p>
+        <div class="price">147€<span>/mois</span></div>
+        <ul>
+          <li>Réponse automatique aux leads</li>
+          <li>Qualification IA</li>
+          <li>CRM Google Sheet</li>
+          <li>Notifications Telegram</li>
+          <li>Support email</li>
+        </ul>
+        <a href="mailto:contact@autopilot-ia.fr?subject=Pack Starter" class="cta-btn" style="width:100%;text-align:center;">Commencer</a>
+      </div>
+      <div class="tier recommended">
+        <h3>Pro</h3>
+        <p>L'associé commercial IA complet</p>
+        <div class="price">297€<span>/mois</span></div>
+        <ul>
+          <li>Tout Starter +</li>
+          <li>Conseils proactifs quotidiens</li>
+          <li>Auto-amélioration hebdo</li>
+          <li>Analytics & rapports</li>
+          <li>Support prioritaire</li>
+        </ul>
+        <a href="mailto:contact@autopilot-ia.fr?subject=Pack Pro" class="cta-btn" style="width:100%;text-align:center;">Choisir Pro</a>
+      </div>
+      <div class="tier">
+        <h3>Scale</h3>
+        <p>Pour les équipes qui veulent tout</p>
+        <div class="price">497€<span>/mois</span></div>
+        <ul>
+          <li>Tout Pro +</li>
+          <li>Multi-canal (email+WhatsApp+SMS)</li>
+          <li>Dashboard analytics complet</li>
+          <li>API & intégrations custom</li>
+          <li>Account manager dédié</li>
+        </ul>
+        <a href="mailto:contact@autopilot-ia.fr?subject=Pack Scale" class="cta-btn" style="width:100%;text-align:center;">Nous contacter</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- GARANTIE -->
+  <section class="guarantee">
+    <h3>🛡️ Garantie ROI 30 jours</h3>
+    <p>Si vous ne constatez pas de résultats concrets dans les 30 premiers jours, on vous rembourse intégralement. Sans question.</p>
+  </section>
+
+  <!-- CTA FINAL -->
+  <section class="final-cta">
+    <h2>Prêt à ne plus perdre de leads ?</h2>
+    <p>Réservez un appel de 15 minutes. On vous montre comment ça marche avec VOS données.</p>
+    <a href="mailto:contact@autopilot-ia.fr?subject=Appel découverte" class="cta-btn">Réserver un appel →</a>
+  </section>
+
+  <footer>
+    <p>AutoPilot IA — Votre associé commercial IA © 2026</p>
+  </footer>
+
+</body>
+</html>
