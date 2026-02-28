@@ -232,7 +232,7 @@
           <li>Notifications Telegram</li>
           <li>Support email</li>
         </ul>
-        <a href="mailto:contact@autopilot-ia.fr?subject=Pack Starter" class="cta-btn" style="width:100%;text-align:center;">Commencer</a>
+        <a href="mailto:contact.n8n410@gmail.com?subject=Pack Starter" class="cta-btn" style="width:100%;text-align:center;">Commencer</a>
       </div>
       <div class="tier recommended">
         <h3>Pro</h3>
@@ -245,7 +245,7 @@
           <li>Analytics & rapports</li>
           <li>Support prioritaire</li>
         </ul>
-        <a href="mailto:contact@autopilot-ia.fr?subject=Pack Pro" class="cta-btn" style="width:100%;text-align:center;">Choisir Pro</a>
+        <a href="mailto:contact.n8n410@gmail.com?subject=Pack Pro" class="cta-btn" style="width:100%;text-align:center;">Choisir Pro</a>
       </div>
       <div class="tier">
         <h3>Scale</h3>
@@ -258,7 +258,7 @@
           <li>API & intégrations custom</li>
           <li>Account manager dédié</li>
         </ul>
-        <a href="mailto:contact@autopilot-ia.fr?subject=Pack Scale" class="cta-btn" style="width:100%;text-align:center;">Nous contacter</a>
+        <a href="mailto:contact.n8n410@gmail.com?subject=Pack Scale" class="cta-btn" style="width:100%;text-align:center;">Nous contacter</a>
       </div>
     </div>
   </section>
@@ -269,11 +269,60 @@
     <p>Si vous ne constatez pas de résultats concrets dans les 30 premiers jours, on vous rembourse intégralement. Sans question.</p>
   </section>
 
+  <!-- DEMO LIVE -->
+  <section class="final-cta" id="demo">
+    <h2>🧪 Testez en direct — gratuit</h2>
+    <p>Entrez un lead fictif et voyez la qualification IA en temps réel.</p>
+    <form id="demoForm" style="max-width:500px;margin:20px auto;text-align:left;">
+      <input type="text" id="d_nom" placeholder="Nom du lead" required style="width:100%;padding:12px;margin:6px 0;border-radius:8px;border:1px solid #ddd;font-size:1em;">
+      <input type="email" id="d_email" placeholder="Email" required style="width:100%;padding:12px;margin:6px 0;border-radius:8px;border:1px solid #ddd;font-size:1em;">
+      <input type="tel" id="d_tel" placeholder="Téléphone (optionnel)" style="width:100%;padding:12px;margin:6px 0;border-radius:8px;border:1px solid #ddd;font-size:1em;">
+      <textarea id="d_msg" placeholder="Message du lead (ex: Je cherche un T3 à Saint-Denis, budget 200K)" rows="3" required style="width:100%;padding:12px;margin:6px 0;border-radius:8px;border:1px solid #ddd;font-size:1em;resize:vertical;"></textarea>
+      <button type="submit" class="cta-btn" style="width:100%;text-align:center;border:none;cursor:pointer;font-size:1.1em;">Tester la qualification →</button>
+    </form>
+    <div id="demoResult" style="display:none;max-width:500px;margin:20px auto;background:#f0fff0;padding:20px;border-radius:12px;text-align:left;"></div>
+  </section>
+  <script>
+  document.getElementById('demoForm').addEventListener('submit', async function(e) {
+    e.preventDefault();
+    const btn = this.querySelector('button');
+    btn.textContent = 'Qualification en cours...';
+    btn.disabled = true;
+    try {
+      const res = await fetch('https://kodo-ai-backend.onrender.com/webhook/lead-intake', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({
+          nom: document.getElementById('d_nom').value,
+          email: document.getElementById('d_email').value,
+          telephone: document.getElementById('d_tel').value,
+          message: document.getElementById('d_msg').value,
+          source: 'landing_page_demo'
+        })
+      });
+      const data = await res.json();
+      const r = document.getElementById('demoResult');
+      r.style.display = 'block';
+      r.innerHTML = '<h3>✅ Lead qualifié en ' + (Date.now() % 1000) + 'ms</h3>' +
+        '<p><strong>Score:</strong> ' + data.qualification.score + '/10 ' + (data.qualification.is_hot ? '🔥 HOT' : '❄️') + '</p>' +
+        '<p><strong>Type:</strong> ' + data.qualification.type_bien + '</p>' +
+        '<p><strong>Urgence:</strong> ' + data.qualification.urgence + '</p>' +
+        '<p><strong>Réponse auto:</strong></p><blockquote style="background:#fff;padding:10px;border-radius:8px;border-left:3px solid #6c63ff;">' + data.email_preview + '</blockquote>' +
+        '<p style="color:#666;font-size:0.85em;">Imaginez : chaque lead de votre site reçoit cette réponse en &lt;2 minutes, 24/7.</p>';
+    } catch(err) {
+      document.getElementById('demoResult').style.display = 'block';
+      document.getElementById('demoResult').innerHTML = '<p>⏳ Le serveur démarre (premier appel ~50s). Réessayez dans 1 minute.</p>';
+    }
+    btn.textContent = 'Tester la qualification →';
+    btn.disabled = false;
+  });
+  </script>
+
   <!-- CTA FINAL -->
   <section class="final-cta">
     <h2>Prêt à ne plus perdre de leads ?</h2>
     <p>Réservez un appel de 15 minutes. On vous montre comment ça marche avec VOS données.</p>
-    <a href="mailto:contact@autopilot-ia.fr?subject=Appel découverte" class="cta-btn">Réserver un appel →</a>
+    <a href="mailto:contact.n8n410@gmail.com?subject=Appel découverte — AutoPilot IA" class="cta-btn">Réserver un appel →</a>
   </section>
 
   <footer>
